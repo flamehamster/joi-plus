@@ -1,0 +1,21 @@
+{
+	"name": "joi-plus",
+	"version": "1.0.7",
+	"description": "Joi with extra rules for string and array.",
+	"author": "Larry Png",
+	"license": "BSD-3-Clause",
+	"main": "index.js",
+	"dependencies": {
+		"@hapi/joi": "^16.1.7"
+	},
+	"keywords": [
+		"joi",
+		"schema",
+		"validation",
+		"numeric",
+		"password",
+		"clean",
+		"match",
+		"array"
+	]
+}
