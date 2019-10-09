@@ -2,6 +2,7 @@
 	"name": "joi-plus",
 	"version": "1.0.7",
 	"description": "Joi with extra rules for string and array.",
+	"repository": "git://github.com/flamehamster/joi-plus",
 	"author": "Larry Png",
 	"license": "BSD-3-Clause",
 	"main": "index.js",
