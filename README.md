@@ -1,6 +1,6 @@
 # Joi-Plus
 
-[@hapi/joi - v16.1.7](https://www.npmjs.com/package/@hapi/joi)
+[@hapi/joi - v16.1.8](https://www.npmjs.com/package/@hapi/joi)
 Making the most powerful schema description language and data validator for JavaScript slightly more powerful.
 
 ## Introduction
