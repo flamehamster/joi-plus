@@ -5,8 +5,17 @@ Making the most powerful schema description language and data validator for Java
 
 ## Introduction
 
+* Joi.string().escape()
+	-- replace `<`, `>`, `&`, `'`, `"`, `/` and `\` with HTML entities.
+
 * Joi.string().numeric()
 	-- Requires the string value to only contain 0-9.
+
+* Joi.string().base32()
+	-- Requires the value to be a valid base32 string.
+
+* Joi.string().countryCode(type)
+	-- Requires the value to be a valid ISO `alpha-2` or ISO `alpha-3` country code.
 
 * Joi.string().password(rules)
 	-- Requires the string value to match rules.
@@ -54,6 +63,10 @@ const schema = Joi.object({
 		.match('password')
 		.required(),
 
+	country: Joi.string()
+		.countryCode('alpha-2')
+		.required(),
+
 	contact_number: Joi.string()
 		.min(2)
 		.max(20)
@@ -68,24 +81,27 @@ const schema = Joi.object({
 
 The above schema defines the following constraints:
 * `email`
-    * a required string
-    * a valid email address string
+	* a required string
+	* a valid email address string
 * `password`
-    * a required string
-    * at least 8 characters long but no more than 120
-    * must contains at least one lowercase character
-    * must contains at least one uppercase character
-    * must contains at least one numeric character
-    * must contains at least one special character
-        * _space_ ! " # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ ` { | } ~ 
+	* a required string
+	* at least 8 characters long but no more than 120
+	* must contains at least one lowercase character
+	* must contains at least one uppercase character
+	* must contains at least one numeric character
+	* must contains at least one special character
+		* _space_ ! " # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ ` { | } ~ 
 * `repeat_password`
-    * a required string
-    * must match `password`
-    * will be removed after validation
+	* a required string
+	* must match `password`
+	* will be removed after validation
+* `country`
+	* a required string
+	* must be a valid ISO 'alpha-2' country code
 * `contact_number`
-    * a required string
-    * at least 8 characters long but no more than 120
-    * must contain only numeric characters
+	* a required string
+	* at least 8 characters long but no more than 20
+	* must contain only numeric characters
 * `fav_animals`
-    * a required array
-    * must be one of [dog, cat, lion, tiger, elephant, hippo]
+	* a required array
+	* must be one of [dog, cat, lion, tiger, elephant, hippo]
