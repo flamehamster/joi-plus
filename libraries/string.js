@@ -58,6 +58,7 @@ module.exports = (joi) => {
 					}
 				],
 				validate: (value, helpers, args, options) => {
+					let type = args.type;
 					if (type === 'alpha-2' && alpha2.includes(value)) {
 						return value;
 					} else if (type === 'alpha-3' && alpha3.includes(value)) {
