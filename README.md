@@ -6,10 +6,20 @@ Making the most powerful schema description language and data validator for Java
 ## Introduction
 
 * Joi.string().escape()
-	-- replace `<`, `>`, `&`, `'`, `"`, `/` and `\` with HTML entities.
+	-- replace `&`, `>`, `<`, `"`, `'`, `\`, `/` and `` ` `` with HTML entities.
+
+* Joi.string().unescape()
+	-- replace `&amp;` | `&gt;` | `&lt;` | `&quot;` | `&#36;` | `&#47;` | `&#92;` | `&#96;` HTML entities with characters.
+
+* Joi.string().sanitize(function)
+	-- sanitize string using the function that takes a string as a parameter.
+	-- returns sanitize string
+
+* Joi.string().alpha()
+	-- Requires the string value to only contain alphabetic characters.
 
 * Joi.string().numeric()
-	-- Requires the string value to only contain 0-9.
+	-- Requires the string value to only contain numeric characters.
 
 * Joi.string().base32()
 	-- Requires the value to be a valid base32 string.
@@ -63,6 +73,16 @@ const schema = Joi.object({
 		.match('password')
 		.required(),
 
+	username: Joi.string()
+		.min(2)
+		.max(20)
+		.alpha()
+		.required(),
+
+	base32_encoded: Joi.string()
+		.base32()
+		.required(),
+
 	country: Joi.string()
 		.countryCode('alpha-2')
 		.required(),
@@ -76,7 +96,7 @@ const schema = Joi.object({
 	fav_animals: Joi.array()
 		.inList(['dog', 'cat', 'lion', 'tiger', 'elephant', 'hippo'], 'animals')
 		.required()
-})
+});
 ```
 
 The above schema defines the following constraints:
@@ -90,18 +110,58 @@ The above schema defines the following constraints:
 	* must contains at least one uppercase character
 	* must contains at least one numeric character
 	* must contains at least one special character
-		* _space_ ! " # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ ` { | } ~ 
+		* _space_ ! " # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ \` { | } ~ 
 * `repeat_password`
 	* a required string
 	* must match `password`
 	* will be removed after validation
+* `username`
+	* a required string
+	* at least 8 characters long but no more than 20
+	* must contain only alphabetic characters
+* `base32_encoded`
+	* a required string
+	* a valid base32 string
 * `country`
 	* a required string
 	* must be a valid ISO 'alpha-2' country code
 * `contact_number`
 	* a required string
-	* at least 8 characters long but no more than 20
+	* at least 2 characters long but no more than 20
 	* must contain only numeric characters
 * `fav_animals`
 	* a required array
 	* must be one of [dog, cat, lion, tiger, elephant, hippo]
+
+#### Sanitize
+Using Joi.string().sanitize() with sanitization libraries such as [sanitize-html](https://www.npmjs.com/package/sanitize-html)
+
+```js
+const sanitizeHtml = require('sanitize-html');
+
+const schema = Joi.object({
+	escape: Joi.string()
+		.escape(),
+
+	unescape: Joi.string()
+		.unescape(),
+
+	sanitize: Joi.string()
+		.sanitize(sanitizeHtml)
+});
+
+let { error, value } = schema.validate({
+	escape: '<escape>',
+	unescape: '&lt;unescape&gt;',
+	sanitize: 'Hello,<script>evil()</script> I am Good.'
+});
+
+console.log(value);
+/*
+{
+	escape: '&lt;escape&gt;',
+	unescape: '<unescape>',
+	sanitize: 'Hello, I am Good.'
+}
+*/
+```

@@ -1,33 +1,106 @@
 'use strict';
-
 const alpha2 = require('../libraries/alpha-2');
 const alpha3 = require('../libraries/alpha-3');
 
-const base32 = /^[A-Z2-7]+=*$/;
+const clean = /^[^><\\\`{}]+$/;
+const escape = /^(?=.*[&"'<>`/\\]).*$/;
+const unescape = /&amp;|&gt;|&lt;|&quot;|&#36;|&#47;|&#92;|&#96;/;
+const alpha = /^[a-zA-Z]+$/;
 const numeric = /^[0-9]+$/;
-const password = /^.*[ -~]$/;
+const base32 = /^[A-Z2-7]+=*$/;
+const password = /^[ -~]+$/;
 
 module.exports = (joi) => {
 	return {
 		type: 'string',
 		base: joi.string(),
 		messages: {
+			'string.clean': '"{{#label}}" contains illegal characters: > < \\ ` } {',
+			'string.escape': '"{{#label}}" contains characters that need to escape: & > < " \' / \\ `',
+			'string.unescape': '"{{#label}}" contains HTML entities that need to unescape: &amp; | &gt; | &lt; | &quot; | &#36; | &#47; | &#92; | &#96;',
+			'string.alpha': '"{{#label}}" must only contain alphabetic characters',
 			'string.numeric': '"{{#label}}" must only contain numeric characters',
 			'string.base32': '"{{#label}}" must be a valid base32 string',
 			'string.countryCode': '"{{#label}}" must be a valid ISO {{#type}} country code',
 			'string.password': '"{{#label}}" {{#message}}'
 		},
-		rules: {
-			escape: {
-				validate: (value, helpers, args, options) => {
-					return value.replace(/&/g, '&amp;')
-							.replace(/"/g, '&quot;')
-							.replace(/'/g, '&#x27;')
-							.replace(/</g, '&lt;')
+		coerce(value, helpers) {
+			if (helpers.schema.$_getRule('escape')) {
+				value = value.replace(/&/g, '&amp;')
 							.replace(/>/g, '&gt;')
-							.replace(/\//g, '&#x2F;')
-							.replace(/\\/g, '&#x5C;')
+							.replace(/</g, '&lt;')
+							.replace(/"/g, '&quot;')
+							.replace(/'/g, '&#36;')
+							.replace(/\//g, '&#47;')
+							.replace(/\\/g, '&#92;')
 							.replace(/`/g, '&#96;');
+			}
+			if (helpers.schema.$_getRule('unescape')) {
+				value = value.replace(/&amp;/g, '&')
+							.replace(/&gt;/g, '>')
+							.replace(/&lt;/g, '<')
+							.replace(/&quot;/g, '"')
+							.replace(/&#36;/g, "'")
+							.replace(/&#47;/g, '/')
+							.replace(/&#92;/g, '\\')
+							.replace(/&#96;/g, '`');
+			}
+			return { value };
+		},
+		rules: {
+			clean: {
+				validate: (value, helpers, args, options) => {
+					if (clean.test(value)) {
+						return value;
+					}
+					return helpers.error('string.clean');
+				}
+			},
+			escape: {
+				convert: true,
+				method() {
+					return this.$_addRule('escape');
+				},
+				validate: (value, helpers, args, options) => {
+					if (!escape.test(value)) {
+						return value;
+					}
+					return helpers.error('string.escape');
+				}
+			},
+			unescape: {
+				convert: true,
+				method() {
+					return this.$_addRule('unescape');
+				},
+				validate: (value, helpers, args, options) => {
+					if (!unescape.test(value)) {
+						return value;
+					}
+					return helpers.error('string.unescape');
+				}
+			},
+			sanitize: {
+				method(sanitizer) {
+					return this.$_addRule({ name: 'sanitize', args: { sanitizer } });
+				},
+				args: [
+					{
+						name: 'sanitizer',
+						assert: (value) => typeof value === 'function',
+						message: 'must be a function'
+					}
+				],
+				validate: (value, helpers, args, options) => {
+					return args.sanitizer(value);
+				}
+			},
+			alpha: {
+				validate: (value, helpers, args, options) => {
+					if (alpha.test(value)) {
+						return value;
+					}
+					return helpers.error('string.alpha');
 				}
 			},
 			numeric: {
