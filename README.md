@@ -6,37 +6,37 @@ Making the most powerful schema description language and data validator for Java
 ## Introduction
 
 * Joi.string().escape()
-	-- replace `&`, `>`, `<`, `"`, `'`, `\`, `/` and `` ` `` with HTML entities.
+	* replace `&`, `>`, `<`, `"`, `'`, `\`, `/` and `` ` `` with HTML entities.
 
 * Joi.string().unescape()
-	-- replace `&amp;` | `&gt;` | `&lt;` | `&quot;` | `&#36;` | `&#47;` | `&#92;` | `&#96;` HTML entities with characters.
+	* replace `&amp;` | `&gt;` | `&lt;` | `&quot;` | `&#36;` | `&#47;` | `&#92;` | `&#96;` HTML entities with characters.
 
 * Joi.string().sanitize(function)
-	-- sanitize string using the function that takes a string as a parameter.
-	-- returns sanitize string
+	* sanitize string using the function that takes a string as a parameter.
+	* returns sanitize string
 
 * Joi.string().alpha()
-	-- Requires the string value to only contain alphabetic characters.
+	* Requires the string value to only contain alphabetic characters.
 
 * Joi.string().numeric()
-	-- Requires the string value to only contain numeric characters.
+	* Requires the string value to only contain numeric characters.
 
 * Joi.string().base32()
-	-- Requires the value to be a valid base32 string.
+	* Requires the value to be a valid base32 string.
 
 * Joi.string().countryCode(type)
-	-- Requires the value to be a valid ISO `alpha-2` or ISO `alpha-3` country code.
+	* Requires the value to be a valid ISO `alpha-2` or ISO `alpha-3` country code.
 
 * Joi.string().password(rules)
-	-- Requires the string value to match rules.
+	* Requires the string value to match rules.
 
 * Joi.string().match(reference)
-	-- Requires the string value to match the reference.
-	-- Removed after validation.
+	* Requires the string value to match the reference.
+	* Removed after validation.
 
 * Joi.array().inList(list, [label])
-	-- Requires the value in array to match the list.
-	-- Overrides the key name for value in error messages.
+	* Requires the value in array to match the list.
+	* Overrides the key name for value in error messages.
 
 ## Quick Start
 
