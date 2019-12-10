@@ -1,5 +1,7 @@
 # Joi-Plus
 
+[![npm package](https://img.shields.io/npm/v/joi-plus.svg)](http://npmjs.org/package/joi-plus) [![npm license](https://img.shields.io/npm/l/joi-plus)](https://img.shields.io/npm/l/joi-plus) [![install size](https://packagephobia.now.sh/badge?p=joi-plus@1.1.2)](https://packagephobia.now.sh/result?p=joi-plus@1.1.2) [![dependencies status](https://david-dm.org/flamehamster/joi-plus/status.svg)](https://david-dm.org/flamehamster/joi-plus)
+
 [@hapi/joi - v16.1.8](https://www.npmjs.com/package/@hapi/joi)
 Making the most powerful schema description language and data validator for JavaScript slightly more powerful.
 
