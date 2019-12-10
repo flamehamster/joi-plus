@@ -22,7 +22,8 @@ module.exports = (joi) => {
 			'string.numeric': '"{{#label}}" must only contain numeric characters',
 			'string.base32': '"{{#label}}" must be a valid base32 string',
 			'string.countryCode': '"{{#label}}" must be a valid ISO {{#type}} country code',
-			'string.password': '"{{#label}}" {{#message}}'
+			'string.password': '"{{#label}}" {{#message}}',
+			'string.contain': '"{{#label}}" must contain "{{#seed}}"{{#message}}'
 		},
 		coerce(value, helpers) {
 			if (helpers.schema.$_getRule('escape')) {
@@ -125,6 +126,7 @@ module.exports = (joi) => {
 				},
 				args: [
 					{
+						ref: true,
 						name: 'type',
 						assert: (value) => value === 'alpha-2' || value === 'alpha-3',
 						message: 'must be "alpha-2" or "alpha-3"'
@@ -157,6 +159,7 @@ module.exports = (joi) => {
 					let rules = args.rules;
 					let regex = '^';
 					let message = 'must contains at least';
+
 					if (rules.lowercase) {
 						regex += '(?=.*[a-z])';
 						message += ' one lowercase character,';
@@ -193,6 +196,45 @@ module.exports = (joi) => {
 							'any.only': `"{{#label}}" must match "${reference}"`
 						}
 					}).strip();
+				}
+			},
+			contain: {
+				method(seed, index) {
+					return this.lowercase().$_addRule({ name: 'contain', args: { seed, index } });
+				},
+				args: [
+					{
+						ref: true,
+						name: 'seed',
+						assert: (value) => typeof value === 'string',
+						message: `must be a string`
+					},
+					{
+						ref: true,
+						name: 'index',
+						assert: (value) => value === undefined || typeof value === 'number' && value >= -1,
+						message: `must be equal or more than -1`
+					}
+				],
+				validate: (value, helpers, args, options) => {
+					let seed = args.seed;
+					let index = args.index;
+
+					if (index) {
+						if (index === -1) {
+							index = value.length - seed.length;
+						}
+						if (value.indexOf(seed, index) === index) {
+							return value;
+						}
+						let message = ` at index ${index}`;
+						return helpers.error('string.contain', { seed, message });
+					} else {
+						if (value.includes(seed)) {
+							return value;
+						}
+						return helpers.error('string.contain', { seed });
+					}
 				}
 			}
 		}

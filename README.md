@@ -36,6 +36,11 @@ Making the most powerful schema description language and data validator for Java
 	* Requires the string value to match the reference.
 	* Removed after validation.
 
+* Joi.string().contain(seed, [index])
+	* Requires the string value to contain the seed.
+	* If index is defined, position of the seed in the string must match the index.
+	* Set index to -1 to match from end of string.
+
 * Joi.array().inList(list, [label])
 	* Requires the value in array to match the list.
 	* Overrides the key name for value in error messages.
@@ -56,6 +61,12 @@ const Joi = require('joi-plus');
 
 ```js
 const schema = Joi.object({
+	username: Joi.string()
+		.min(8)
+		.max(20)
+		.alpha()
+		.required(),
+
 	email: Joi.string()
 		.email()
 		.required(),
@@ -73,12 +84,6 @@ const schema = Joi.object({
 
 	repeat_password: Joi.string()
 		.match('password')
-		.required(),
-
-	username: Joi.string()
-		.min(2)
-		.max(20)
-		.alpha()
 		.required(),
 
 	base32_encoded: Joi.string()
@@ -102,6 +107,10 @@ const schema = Joi.object({
 ```
 
 The above schema defines the following constraints:
+* `username`
+	* a required string
+	* at least 8 characters long but no more than 20
+	* must contain only alphabetic characters
 * `email`
 	* a required string
 	* a valid email address string
@@ -117,10 +126,6 @@ The above schema defines the following constraints:
 	* a required string
 	* must match `password`
 	* will be removed after validation
-* `username`
-	* a required string
-	* at least 8 characters long but no more than 20
-	* must contain only alphabetic characters
 * `base32_encoded`
 	* a required string
 	* a valid base32 string
