@@ -10,6 +10,11 @@ const numeric = /^[0-9]+$/;
 const base32 = /^[A-Z2-7]+=*$/;
 const password = /^[ -~]+$/;
 
+const lowercase = /[a-z]/;
+const uppercase = /[A-Z]/;
+const number = /[\d]/;
+const special = /[ -/:-@[-`{-~]/;
+
 module.exports = (joi) => {
 	return {
 		type: 'string',
@@ -143,49 +148,73 @@ module.exports = (joi) => {
 				}
 			},
 			password: {
-				method(rules = {}) {
-					let min = rules.min;
-					let max = rules.max;
-					return this.min(min).max(max).$_addRule({ name: 'password', args: { rules } });
+				method(policy = {}) {
+					let min = policy.min || 8;
+					let max = policy.max || 24;
+					return this.min(min).max(max).$_addRule({ name: 'password', args: { policy } });
 				},
 				args: [
 					{
-						name: 'rules',
-						assert: (value) => Object.keys(value).length > 0,
+						name: 'policy',
+						assert: (value) => typeof value === 'object' && !Array.isArray(value),
 						message: 'must be an object'
 					}
 				],
 				validate: (value, helpers, args, options) => {
-					let rules = args.rules;
-					let regex = '^';
-					let message = 'must contains at least';
-
-					if (rules.lowercase) {
-						regex += '(?=.*[a-z])';
-						message += ' one lowercase character,';
-					}
-					if (rules.uppercase) {
-						regex += '(?=.*[A-Z])';
-						message += ' one uppercase character,';
-					}
-					if (rules.number) {
-						regex += '(?=.*\\d)';
-						message += ' one numeric character,';
-					}
-					if (rules.special) {
-						regex += '(?=.*[ -/:-@[-`{-~])';
-						message += ' one special character,';
-					}
-					regex += '.*$';
-					message = message.slice(0, -1);
-					
-					regex = new RegExp(regex);
-					if (!regex.test(value)) {
-						return helpers.error('string.password', { message });
-					}
 					if (!password.test(value)) {
 						return helpers.error('string.password', { message: 'contains illegal characters' });
 					}
+
+					let policy = args.policy;
+					let requirement = 0;
+					let count = 0;
+					let message = '';
+					let error = false;
+
+					if (policy.lowercase) {
+						requirement++;
+						message += ' one lowercase character,';
+						if (lowercase.test(value)) {
+							count++;
+						}
+					}
+					if (policy.uppercase) {
+						requirement++;
+						message += ' one uppercase character,';
+						if (uppercase.test(value)) {
+							count++;
+						}
+					}
+					if (policy.number) {
+						requirement++;
+						message += ' one numeric character,';
+						if (number.test(value)) {
+							count++;
+						}
+					}
+					if (policy.special) {
+						requirement++;
+						message += ' one special character,';
+						if (special.test(value)) {
+							count++;
+						}
+					}
+					message = message.slice(0, -1);
+					
+					if (policy.count && policy.count > 0 && policy.count < requirement) {
+						if (policy.count > count) {
+							error = true;
+							message = ` ${policy.count} of the ${requirement} requirements:` + message;
+						}
+					} else if (count !== requirement) {
+						error = true;
+					}
+
+					if (error) {
+						message = 'must contains at least' + message;
+						return helpers.error('string.password', { message });
+					}
+					
 					return value;
 				}
 			},

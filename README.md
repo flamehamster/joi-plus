@@ -14,7 +14,7 @@ Making the most powerful schema description language and data validator for Java
 	* replace `&amp;` | `&gt;` | `&lt;` | `&quot;` | `&#36;` | `&#47;` | `&#92;` | `&#96;` HTML entities with characters.
 
 * Joi.string().sanitize(function)
-	* sanitize string using the function that takes a string as a parameter.
+	* sanitize string using function that takes a string as a parameter.
 	* returns sanitize string
 
 * Joi.string().alpha()
@@ -29,8 +29,17 @@ Making the most powerful schema description language and data validator for Java
 * Joi.string().countryCode(type)
 	* Requires the value to be a valid ISO `alpha-2` or ISO `alpha-3` country code.
 
-* Joi.string().password(rules)
-	* Requires the string value to match rules.
+* Joi.string().password(policy)
+	* Requires the string value to match policy.
+		* policy.min - password minimum length, default 8.
+		* policy.max - password maximum length, default 24.
+		* policy.lowercase - if true, password requires lowercase.
+		* policy.uppercase - if true, password requires uppercase.
+		* policy.number - if true, password requires number.
+		* policy.special - if true, password requires special character.
+		* policy.count
+			* If defined, password is required to pass the number of requirements.
+			* If undefined, password is required to pass all of requirements.
 
 * Joi.string().match(reference)
 	* Requires the string value to match the reference.
@@ -78,7 +87,8 @@ const schema = Joi.object({
 			lowercase: true,
 			uppercase: true,
 			number: true,
-			special: true
+			special: true,
+			count: 3
 		})
 		.required(),
 
@@ -117,11 +127,12 @@ The above schema defines the following constraints:
 * `password`
 	* a required string
 	* at least 8 characters long but no more than 120
-	* must contains at least one lowercase character
-	* must contains at least one uppercase character
-	* must contains at least one numeric character
-	* must contains at least one special character
-		* _space_ ! " # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ \` { | } ~ 
+	* must contain at least 3 of the 4 requirements
+		* one lowercase character
+		* one uppercase character
+		* one numeric character
+		* one special character
+			* _space_ ! " # $ % & ' ( ) * + , - . : ; < = > ? @ [ \ ] ^ _ \` { | } ~ 
 * `repeat_password`
 	* a required string
 	* must match `password`
