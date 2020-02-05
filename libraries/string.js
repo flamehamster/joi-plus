@@ -20,15 +20,15 @@ module.exports = (joi) => {
 		type: 'string',
 		base: joi.string(),
 		messages: {
-			'string.clean': '"{{#label}}" contains illegal characters: > < \\ ` } {',
-			'string.escape': '"{{#label}}" contains characters that need to escape: & > < " \' / \\ `',
-			'string.unescape': '"{{#label}}" contains HTML entities that need to unescape: &amp; | &gt; | &lt; | &quot; | &#36; | &#47; | &#92; | &#96;',
-			'string.alpha': '"{{#label}}" must only contain alphabetic characters',
-			'string.numeric': '"{{#label}}" must only contain numeric characters',
-			'string.base32': '"{{#label}}" must be a valid base32 string',
-			'string.countryCode': '"{{#label}}" must be a valid ISO {{#type}} country code',
-			'string.password': '"{{#label}}" {{#message}}',
-			'string.contain': '"{{#label}}" must contain "{{#seed}}"{{#message}}'
+			'string.clean': '{{#label}} contains illegal characters: > < \\ ` } {',
+			'string.escape': '{{#label}} contains characters that need to escape: & > < " \' / \\ `',
+			'string.unescape': '{{#label}} contains HTML entities that need to unescape: &amp; | &gt; | &lt; | &quot; | &#36; | &#47; | &#92; | &#96;',
+			'string.alpha': '{{#label}} must only contain alphabetic characters',
+			'string.numeric': '{{#label}} must only contain numeric characters',
+			'string.base32': '{{#label}} must be a valid base32 string',
+			'string.countryCode': '{{#label}} must be a valid ISO {{#type}} country code',
+			'string.password': '{{#label}} {{#message}}',
+			'string.contain': '{{#label}} must contain "{{#seed}}"{{#message}}'
 		},
 		coerce(value, helpers) {
 			if (helpers.schema.$_getRule('escape')) {
@@ -222,7 +222,7 @@ module.exports = (joi) => {
 				method(reference) {
 					return this.valid(joi.ref(reference)).prefs({
 						messages: {
-							'any.only': `"{{#label}}" must match "${reference}"`
+							'any.only': `{{#label}} must match "${reference}"`
 						}
 					}).strip();
 				}
