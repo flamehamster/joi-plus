@@ -1,6 +1,6 @@
 {
 	"name": "joi-plus",
-	"version": "1.1.4",
+	"version": "1.2.0",
 	"description": "Joi with extra rules for string and array.",
 	"repository": "git://github.com/flamehamster/joi-plus",
 	"author": "Larry Png",

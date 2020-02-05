@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.2.0
+
+Update [@hapi/joi](https://www.npmjs.com/package/@hapi/joi) from version 16.1.8 to 17.1.0
+
 ### 1.1.4
 
 Add requirement count to password policy
