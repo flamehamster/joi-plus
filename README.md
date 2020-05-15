@@ -2,7 +2,7 @@
 
 [![npm package](https://img.shields.io/npm/v/joi-plus.svg)](http://npmjs.org/package/joi-plus) [![npm license](https://img.shields.io/npm/l/joi-plus)](https://img.shields.io/npm/l/joi-plus) [![install size](https://packagephobia.now.sh/badge?p=joi-plus@1.1.2)](https://packagephobia.now.sh/result?p=joi-plus@1.1.2) [![dependencies status](https://david-dm.org/flamehamster/joi-plus/status.svg)](https://david-dm.org/flamehamster/joi-plus)
 
-[@hapi/joi - v17.1.0](https://www.npmjs.com/package/@hapi/joi)
+[@hapi/joi - v17.1.1](https://www.npmjs.com/package/@hapi/joi)
 Making the most powerful schema description language and data validator for JavaScript slightly more powerful.
 
 ## Introduction
@@ -49,10 +49,6 @@ Making the most powerful schema description language and data validator for Java
 	* Requires the string value to contain the seed.
 	* If index is defined, position of the seed in the string must match the index.
 	* Set index to -1 to match from end of string.
-
-* Joi.array().inList(list, [label])
-	* Requires the value in array to match the list.
-	* Overrides the key name for value in error messages.
 
 ## Quick Start
 
@@ -108,10 +104,6 @@ const schema = Joi.object({
 		.min(2)
 		.max(20)
 		.numeric()
-		.required(),
-
-	fav_animals: Joi.array()
-		.inList(['dog', 'cat', 'lion', 'tiger', 'elephant', 'hippo'], 'animals')
 		.required()
 });
 ```
@@ -147,9 +139,6 @@ The above schema defines the following constraints:
 	* a required string
 	* at least 2 characters long but no more than 20
 	* must contain only numeric characters
-* `fav_animals`
-	* a required array
-	* must be one of [dog, cat, lion, tiger, elephant, hippo]
 
 #### Sanitize
 Using Joi.string().sanitize() with sanitization libraries such as [sanitize-html](https://www.npmjs.com/package/sanitize-html)

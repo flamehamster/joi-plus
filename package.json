@@ -1,13 +1,13 @@
 {
 	"name": "joi-plus",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "Joi with extra rules for string and array.",
 	"repository": "git://github.com/flamehamster/joi-plus",
 	"author": "Larry Png",
 	"license": "BSD-3-Clause",
 	"main": "index.js",
 	"dependencies": {
-		"@hapi/joi": "^17.1.0"
+		"@hapi/joi": "^17.1.1"
 	},
 	"keywords": [
 		"joi",
@@ -20,7 +20,6 @@
 		"base32",
 		"password",
 		"country",
-		"iso 3166",
-		"array"
+		"iso 3166"
 	]
 }
