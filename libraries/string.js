@@ -25,6 +25,7 @@ module.exports = (joi) => {
 			'string.unescape': '{{#label}} contains HTML entities that need to unescape: &amp; | &gt; | &lt; | &quot; | &#36; | &#47; | &#92; | &#96;',
 			'string.alpha': '{{#label}} must only contain alphabetic characters',
 			'string.numeric': '{{#label}} must only contain numeric characters',
+			'string.decimal': '{{#label}} must be a decimal number of maximum {{#digit}} digits and {{#decimal}} decimal places',
 			'string.base32': '{{#label}} must be a valid base32 string',
 			'string.countryCode': '{{#label}} must be a valid ISO {{#type}} country code',
 			'string.password': '{{#label}} {{#message}}',
@@ -115,6 +116,37 @@ module.exports = (joi) => {
 						return value;
 					}
 					return helpers.error('string.numeric');
+				}
+			},
+			decimal: {
+				method(digit, decimal) {
+					return this.$_addRule({ name: 'decimal', args: { digit, decimal } });
+				},
+				args: [
+					{
+						ref: true,
+						name: 'digit',
+						assert: (value) => typeof value === 'number',
+						message: `must be a number`
+					},
+					{
+						ref: true,
+						name: 'decimal',
+						assert: (value) => typeof value === 'number',
+						message: `must be a number`
+					}
+				],
+				validate: (value, helpers, args, options) => {
+					let digit = args.digit;
+					let decimal = args.decimal;
+
+					let pattern = `^(0(\\.\\d{1,${decimal}})?|([1-9]\\d{0,${digit - decimal - 1}}(\\.\\d{1,${decimal}})?))$`;
+					let regex = new RegExp(pattern);
+
+					if (regex.test(value)) {
+						return value;
+					}
+					return helpers.error('string.decimal', { digit, decimal });
 				}
 			},
 			base32: {

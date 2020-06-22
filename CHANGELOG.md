@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.2.2
+
+Add decimal string validation
+
 ### 1.2.1
 
 Update [@hapi/joi](https://www.npmjs.com/package/@hapi/joi) from version 17.1.0 to 17.1.1

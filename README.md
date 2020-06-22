@@ -23,6 +23,9 @@ Making the most powerful schema description language and data validator for Java
 * Joi.string().numeric()
 	* Requires the string value to only contain numeric characters.
 
+* Joi.string().decimal(digit, decimal)
+	* Requires the string value to be a valid decimal number.
+
 * Joi.string().base32()
 	* Requires the value to be a valid base32 string.
 
@@ -105,6 +108,10 @@ const schema = Joi.object({
 		.max(20)
 		.numeric()
 		.required()
+
+	salary: Joi.string()
+		.decimal(11,2)
+		.required()
 });
 ```
 
@@ -139,6 +146,10 @@ The above schema defines the following constraints:
 	* a required string
 	* at least 2 characters long but no more than 20
 	* must contain only numeric characters
+
+* `salary`
+	* a required string
+	* must be a valid decimal number with up to 11 digits with 2 decimal places
 
 #### Sanitize
 Using Joi.string().sanitize() with sanitization libraries such as [sanitize-html](https://www.npmjs.com/package/sanitize-html)
