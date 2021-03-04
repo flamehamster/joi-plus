@@ -1,8 +1,8 @@
 # Joi-Plus
 
-[![npm package](https://img.shields.io/npm/v/joi-plus.svg)](http://npmjs.org/package/joi-plus) [![npm license](https://img.shields.io/npm/l/joi-plus)](https://img.shields.io/npm/l/joi-plus) [![install size](https://packagephobia.now.sh/badge?p=joi-plus@1.1.2)](https://packagephobia.now.sh/result?p=joi-plus@1.1.2) [![dependencies status](https://david-dm.org/flamehamster/joi-plus/status.svg)](https://david-dm.org/flamehamster/joi-plus)
+[![npm package](https://img.shields.io/npm/v/joi-plus.svg)](http://npmjs.org/package/joi-plus) [![npm license](https://img.shields.io/npm/l/joi-plus)](https://img.shields.io/npm/l/joi-plus) [![install size](https://packagephobia.now.sh/badge?p=joi-plus@1.3.0)](https://packagephobia.now.sh/result?p=joi-plus@1.3.0) [![dependencies status](https://david-dm.org/flamehamster/joi-plus/status.svg)](https://david-dm.org/flamehamster/joi-plus)
 
-[@hapi/joi - v17.1.1](https://www.npmjs.com/package/@hapi/joi)
+[joi - v17.4.0](https://www.npmjs.com/package/joi)
 Making the most powerful schema description language and data validator for JavaScript slightly more powerful.
 
 ## Introduction
@@ -107,7 +107,7 @@ const schema = Joi.object({
 		.min(2)
 		.max(20)
 		.numeric()
-		.required()
+		.required(),
 
 	salary: Joi.string()
 		.decimal(11,2)
@@ -168,7 +168,7 @@ const schema = Joi.object({
 		.sanitize(sanitizeHtml)
 });
 
-let { error, value } = schema.validate({
+const { error, value } = schema.validate({
 	escape: '<escape>',
 	unescape: '&lt;unescape&gt;',
 	sanitize: 'Hello,<script>evil()</script> I am Good.'

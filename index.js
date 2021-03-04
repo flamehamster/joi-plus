@@ -1,6 +1,6 @@
 'use strict';
 
-const Joi = require('@hapi/joi').extend(
+const Joi = require('joi').extend(
 	require('./libraries/string')
 );
 
