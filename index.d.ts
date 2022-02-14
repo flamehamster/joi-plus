@@ -1,6 +1,5 @@
 import Joi from 'joi';
 interface StringSchema extends Joi.StringSchema {
-    
 
     /**replace &, >, <, ", ', \, / and ` with HTML entities.*/
     escape(): this
@@ -8,8 +7,20 @@ interface StringSchema extends Joi.StringSchema {
     /**replace &amp;amp; | &amp;gt; | &amp;lt; | &amp;quot; | &amp;#36; | &amp;#47; | &amp;#92; | &amp;#96; HTML entities with characters. */
     unescape(): this
 
+    /**
+     - sanitize string using function that takes a string as a parameter.
+     - returns sanitize string
+    */
+    sanitize(sanitizer: (value: string) => string): this
+
+    /** Requires the string value to only contain alphabetic characters. */
+    alpha(): this
+
     /**Requires the string value to only contain numeric characters.*/
     numeric(): this
+
+    /** Requires the value to be a valid base32 string. */
+    base32(): this
 
     /**Requires the string value to be a valid decimal number. */
     decimal(digit: number, decimal: number): this
