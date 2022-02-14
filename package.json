@@ -6,6 +6,7 @@
 	"author": "Larry Png",
 	"license": "BSD-3-Clause",
 	"main": "index.js",
+    "types": "index.d.ts",
 	"dependencies": {
 		"joi": "^17.4.0"
 	},
